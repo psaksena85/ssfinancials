@@ -1,0 +1,27 @@
+{
+  header(id: "4Bpk2XDXoTYHh1ujcz5L0G") {
+    logo {
+      title
+      description
+      url
+    }
+    navigationMenuCollection {
+      ... on HeaderNavigationMenuCollection {
+        items {
+          ... on Menuitem {
+            label
+            url
+            childrenCollection {
+              items {
+                ... on Menuitem {
+                  label
+                  url
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
