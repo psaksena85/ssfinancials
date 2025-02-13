@@ -1,0 +1,30 @@
+$input-border-color: #ccc;
+$button-bg-color: #282c34;
+$button-text-color: white;
+
+.contact-container {
+  padding: 20px;
+  text-align: center;
+}
+
+.contact-form {
+  max-width: 400px;
+  margin: auto;
+}
+
+.contact-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid $input-border-color;
+}
+
+.contact-button {
+  background-color: $button-bg-color;
+  color: $button-text-color;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -1,0 +1,21 @@
+header {
+	background: #282c34;
+	color: white;
+	padding: 10px;
+	text-align: center;
+	width: 100%;  // Ensures header background is edge-to-edge
+  
+	.wrapper {
+	  margin: 0 auto;
+	  max-width: 1440px;
+	  padding: 0 20px;  // Padding for content inside the header
+	}
+  }
+  
+  nav {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+  }
+  
