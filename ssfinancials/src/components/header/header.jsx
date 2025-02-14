@@ -3,52 +3,33 @@ import { NavLink } from "react-router-dom";
 import { createClient } from "contentful";
 import "./header.scss";
 
-function Header() {
+const SPACE_ID = "9b3lonhnb5ls"; // Replace with your Space ID
+const ACCESS_TOKEN = "rQl4ijlf6w6nQgpDtrrS8ttff1Og_FcyjUUPpQkGGjM"; // Replace with your Access Token
+const GRAPHQL_ENDPOINT = `https://graphql.contentful.com/content/v1/spaces/${SPACE_ID}/environments/master`;
+
+
+function Header({headerdata}) {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [headerData, setHeaderData] = useState(null);
-  const [error, setError] = useState(null); // Add error state
-
-  // Contentful API Client
-  const client = createClient({
-    space: "9b3lonhnb5ls",  // Replace with your Contentful Space ID
-    environment: "master",
-    accessToken: "rQl4ijlf6w6nQgpDtrrS8ttff1Og_FcyjUUPpQkGGjM",  // Replace with your Contentful Access Token
-  });
-
-  useEffect(() => {
-    client
-      .getEntry("4Bpk2XDXoTYHh1ujcz5L0G")  // Entry ID here
-      .then((entry) => {
-        setHeaderData(entry.fields);  // Directly access the fields object
-      })
-      .catch((error) => {
-        setError("Error fetching asset: " + error.message);  // Handle any errors
-      });
-  }, []);
-
-  if (error) return <div>{error}</div>;
-  if (!headerData) return <div>Loading...</div>;
 
   // Render navigation item with children (sub-menu)
+  // Render navigation item with children (sub-menu)
   const renderNavItem = (item) => {
-    if (item.fields.children && item.fields.children.length > 0) {
-      return (
-        <div key={item.sys.id} className="nav-item">
-          <span>{item.fields.label}</span>
-          <div className="sub-menu">
-            {item.fields.children.map((child, index) => (
-              <NavLink key={index} to={child.fields.url} className="sub-nav-link">
-                {child.fields.label}
+    return (
+      <div key={item.label} className="nav-item">
+        <NavLink to={item.url} className="nav-link">
+          {item.label}
+        </NavLink>
+        {/* Render dropdown for child pages if they exist */}
+        {item.childrenCollection?.items?.length > 0 && (
+          <div className="dropdown">
+            {item.childrenCollection.items.map((child, index) => (
+              <NavLink key={index} to={child.url} className="dropdown-item">
+                {child.label}
               </NavLink>
             ))}
           </div>
-        </div>
-      );
-    }
-    return (
-      <NavLink key={item.sys.id} to={item.fields.url} className="nav-link">
-        {item.fields.label}
-      </NavLink>
+        )}
+      </div>
     );
   };
 
@@ -57,7 +38,7 @@ function Header() {
       <div className="header__wrapper">
         {/* Logo from Contentful */}
         <img
-          src={`https:${headerData.logo.fields.file.url}`}  // Add 'https:' to the URL
+          src={`${headerdata.logo.url}`}  // Add 'https:' to the URL
           alt="Logo"
           className="header__logo"
         />
@@ -84,17 +65,8 @@ function Header() {
 
         {/* Navigation Menu */}
         <nav className={`header__nav ${menuOpen ? "open" : ""}`}>
-          {headerData.navigationMenu.map(renderNavItem)} {/* Render navigation items */}
+          {headerdata.navigationMenuCollection.items.map((item, index) => renderNavItem(item))}
         </nav>
-
-        {/* Call to Action */}
-        {headerData.cta && (
-          <div className="cta">
-            <NavLink to={headerData.cta.fields.url} className="cta-link">
-              {headerData.cta.fields.label}
-            </NavLink>
-          </div>
-        )}
       </div>
     </header>
   );
